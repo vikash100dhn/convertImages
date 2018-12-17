@@ -15,11 +15,11 @@ public class WriteQRCode {
 		 
 		QRCodeWriter qrCodeWriter = new QRCodeWriter();
 		BitMatrix bitMatrix = qrCodeWriter.encode(
-				"JavaSampleApproach\nJava Technology, Spring Framework",
+				"Vikash Kumar Singh, Associate, 9766138668",
 				BarcodeFormat.QR_CODE,
 				350, 350); // width x height
  
-		Path path = FileSystems.getDefault().getPath("C:\\Users\\Vikash\\Desktop\\JSA-QRCode.png");
+		Path path = FileSystems.getDefault().getPath("C:\\Users\\Administrator\\Desktop\\QR.png");
 		MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
 	}
 }

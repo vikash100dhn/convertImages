@@ -1,5 +1,7 @@
 package com.comapany.imageconversion;
 
+import javax.ws.rs.core.Response;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +22,16 @@ public class ImageController {
 	public ImageConversionOutput convertImageIntoThumbnail(@RequestBody ImageConversionInput input)
 	{
 		ImageConversionService service = new ImageConversionService();
-		ImageConversionOutput  output = service.convertImageToThumbnail(input);
-		return null;
+		ImageConversionOutput  output = null;
+		try {
+			 output = service.convertImageToThumbnail(input);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return output;
 		
 	}
-	
-
 }

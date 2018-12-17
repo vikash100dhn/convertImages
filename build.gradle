@@ -36,6 +36,9 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '1.2.1.RELEASE', ext: 'pom'
 	compile 'com.google.zxing:core:3.2.1'
 	// https://mvnrepository.com/artifact/com.google.zxing/javase
-compile group: 'com.google.zxing', name: 'javase', version: '3.2.1'
+	compile group: 'com.google.zxing', name: 'javase', version: '3.2.1'
+	compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.0'
+	//compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.455'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.403'
 	
 }
