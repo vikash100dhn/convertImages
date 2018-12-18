@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -44,58 +45,27 @@ public class ImageConversionUtils {
 	        throw new UncheckedIOException(ioe);
 	    } 
 	} 
-	public void base64ToThumbnail(String base64String)
+	public static InputStream bufferedImageToInputstream(BufferedImage bufferedImage, String fileType)
 	{
-		BufferedImage bout= base64StringToImg(base64String);
-		BufferedImage thumbnail = scale(bout, 0.4);
-		try {
-			ImageIO.write(thumbnail, "jpg", new File("C:\\Users\\Vikash\\Desktop\\pari.jpg"));
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		  try {
+			ImageIO.write(bufferedImage,fileType,os);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		  
+		  InputStream is = new ByteArrayInputStream(os.toByteArray());
+		  return is;
 	}
-	private BufferedImage scale(BufferedImage source,double ratio) {
-		  int w = (int) (source.getWidth() * ratio);
-		  int h = (int) (source.getHeight() * ratio);
-		  BufferedImage bi = getCompatibleImage(w, h);
-		  Graphics2D g2d = bi.createGraphics();
-		  double xScale = (double) w / source.getWidth();
-		  double yScale = (double) h / source.getHeight();
-		  AffineTransform at = AffineTransform.getScaleInstance(xScale,yScale);
-		  g2d.drawRenderedImage(source, at);
-		  g2d.dispose();
-		  return bi;
-		}
-
-		private BufferedImage getCompatibleImage(int w, int h) {
-		  GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		  GraphicsDevice gd = ge.getDefaultScreenDevice();
-		  GraphicsConfiguration gc = gd.getDefaultConfiguration();
-		  BufferedImage image = gc.createCompatibleImage(w, h);
-		  return image;
-		}
-	public static void getQRCode(String base64String)
-	{
 		
-	}
 	
 	public static void main(String args[])
 	{
 		try {
-			BufferedImage bif = ImageIO.read(new File("C:\\Users\\Vikash\\Desktop\\pari.jpg"));
+			BufferedImage bif = ImageIO.read(new File("C:\\Users\\Vikash\\Desktop\\testpng.png"));
 			String base64String = imgToBase64String(bif, "png");
-			System.out.println(imgToBase64String(bif, "png"));
-			
-			BufferedImage bout= base64StringToImg(base64String);
-			
-			ImageConversionUtils util = new ImageConversionUtils();
-			BufferedImage thumbnail = util.scale(bout, 0.4);
-			ImageIO.write(thumbnail, "jpg", new File("C:\\Users\\Vikash\\Desktop\\pari.jpg"));
-			
-			//ImageIO.write(bout, "jpg", new File("C:\\Users\\Vikash\\Desktop\\pariw.jpg"));
-			
-			
+			System.out.println(base64String);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

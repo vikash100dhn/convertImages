@@ -1,4 +1,4 @@
-package com.comapany.imageconversion;
+	package com.comapany.imageconversion;
 
 import javax.ws.rs.core.Response;
 
@@ -22,6 +22,7 @@ public class ImageController {
 	public ImageConversionOutput convertImageIntoThumbnail(@RequestBody ImageConversionInput input)
 	{
 		ImageConversionService service = new ImageConversionService();
+		System.out.println(input);
 		ImageConversionOutput  output = null;
 		try {
 			 output = service.convertImageToThumbnail(input);

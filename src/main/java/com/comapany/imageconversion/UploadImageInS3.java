@@ -6,8 +6,13 @@ import java.io.InputStream;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -16,47 +21,46 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 public class UploadImageInS3 {
 
-	public static void uploadStringInS3(String token) throws IOException {
+	public static void uploadStringInS3(String fileName, InputStream inputStream) throws IOException {
 
-		String bucketName = "";
-		String stringObjKeyName = "abc.json";
-		boolean objectPresent = false;
+		String bucketName = "cl-img-dev-store";
+		String stringObjKeyName = fileName;
 
 		try {
 
-			AmazonS3 s3Client = new AmazonS3Client();
-			String  refreshToken =token;//this refresh token will be fetch from API query
-			ObjectListing objectListing = s3Client.listObjects(new ListObjectsRequest().withBucketName(bucketName));
-			for(S3ObjectSummary s3ObjectSummary: objectListing.getObjectSummaries())
+			AWSCredentials credentials = new BasicAWSCredentials(
+					  "AKIAIM6Y3UZ7VZJPMUSQ", 
+					  "co7gF/bRg9cgtU4mhNJ7P7KC39SPyF5i04JejNY7"
+					);
+			AmazonS3 s3Client = AmazonS3ClientBuilder
+					  .standard()
+					  .withCredentials(new AWSStaticCredentialsProvider(credentials))
+					  .withRegion(Regions.US_EAST_1)
+					  .build();
+				
+			if(s3Client.doesBucketExist(bucketName)) {
+			    System.out.println("Bucket name is not available."
+			      + " Try again with a different Bucket name.");
+			    return;
+			}
+			else
 			{
-				if(s3ObjectSummary.getKey().equals("abc.json"))
+				PutObjectRequest request = null;
+				if(fileName.contains("thumbnail"))
 				{
-					objectPresent=true;
+					 request = new PutObjectRequest(bucketName, "/", new File(stringObjKeyName));
 				}
-			}
-			System.out.println("Object Present::"+objectPresent);
-			if(objectPresent)
-			{
-				s3Client.putObject(bucketName, stringObjKeyName, refreshToken);
-			}
-			else {
-				
-				InputStream is = new InputStream() {
-					
-					@Override
-					public int read() throws IOException {
-						return -1;
-					}
-				};
-				
-				 PutObjectRequest request = new PutObjectRequest(bucketName, "/", new File("abc.json"));
+				else
+				{
+					request = new PutObjectRequest(bucketName, "/", new File(stringObjKeyName));
+				}
 		         ObjectMetadata metadata = new ObjectMetadata();
-		         metadata.setContentType("plain/text");
+		         metadata.setContentType("image/png");
 		         metadata.addUserMetadata("x-amz-meta-title", "someTitle");
 		         request.setMetadata(metadata);
-		         s3Client.putObject(bucketName, stringObjKeyName, is, metadata);
-		         s3Client.putObject(bucketName, stringObjKeyName, refreshToken);
+		         s3Client.putObject(bucketName, stringObjKeyName, inputStream, metadata);
 			}
+			
 		}
 		catch(AmazonServiceException e) {
 			// The call w as transmitted successfully, but Amazon S3 couldn't process 

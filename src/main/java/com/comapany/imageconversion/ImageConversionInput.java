@@ -31,4 +31,9 @@ public class ImageConversionInput {
 	public void setImageData(String imageData) {
 		this.imageData = imageData;
 	}
+	@Override
+	public String toString() {
+		return "ImageConversionInput [fileName=" + fileName + ", fileType=" + fileType + ", barCodeFlag=" + barCodeFlag
+				+ ", imageData=" + imageData + "]";
+	}
 }
