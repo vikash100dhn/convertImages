@@ -29,8 +29,8 @@ public class UploadImageInS3 {
 		try {
 
 			AWSCredentials credentials = new BasicAWSCredentials(
-					  "AKIAIM6Y3UZ7VZJPMUSQ", 
-					  "co7gF/bRg9cgtU4mhNJ7P7KC39SPyF5i04JejNY7"
+					  "", 
+					  ""
 					);
 			AmazonS3 s3Client = AmazonS3ClientBuilder
 					  .standard()
